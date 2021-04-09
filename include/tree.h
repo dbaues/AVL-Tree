@@ -58,7 +58,7 @@ class C_Tree{
         bool p_stop();
         void p_updateHeights(S_NODE*, S_NODE*, bool=true);
         void p_updateHeightsDel(S_NODE*, S_NODE*);
-        int p_balance(S_NODE*, bool=true);
+        int p_balance(S_NODE*);
 
         void p_rotateLeft(S_NODE*);
         void p_rotateLeft(S_NODE*, S_NODE*, S_NODE*);

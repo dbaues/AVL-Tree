@@ -127,7 +127,7 @@ void C_Tree::p_updateHeights(S_NODE* node, S_NODE* from, bool inserting){
         difference = abs(node->rheight - node->lheight);
 
         // Check for problem and address it.
-        if(difference > 1){ caseCode = this->p_balance(node, inserting); }
+        if(difference > 1){ caseCode = this->p_balance(node); }
 
         // Continue up.
         if(node != this->p_root){
@@ -148,7 +148,7 @@ void C_Tree::p_updateHeights(S_NODE* node, S_NODE* from, bool inserting){
         difference = abs(node->rheight - node->lheight);
 
         // Check for problem and address it.
-        if(difference > 1){ caseCode = this->p_balance(node, inserting); }
+        if(difference > 1){ caseCode = this->p_balance(node); }
         
         // Continue up.
         if(node != this->p_root){
@@ -185,7 +185,7 @@ void C_Tree::p_updateHeights(S_NODE* node, S_NODE* from, bool inserting){
 **       C      |      C      |   C         |        C     
 **    =================================================
 */
-int C_Tree::p_balance(S_NODE* node, bool inserting){
+int C_Tree::p_balance(S_NODE* node){
     S_NODE* parent; // Used for the "Parent" node.
 
     if(node->lheight > node->rheight){
@@ -613,12 +613,12 @@ void C_Tree::p_readFile(char* fileName){
                 if(file >> num){ this->deleteNode(num); }
                 else{ throw MyException("Unexpected End-of-file."); }
                 break;
-            case 2: // Prints the current RB Tree.
-                cout << "<><><><><><><><><><><><><><><><><>" << endl;
+            case 2: // Prints the current AVL Tree. 
+                cout << "\033[1;30m<><><><><><><PRINT TREE><><><><><><>\033[0m" << endl;
                 this->print();
-                cout << "<><><><><><><><><><><><><><><><><>" << endl;
+                cout << "\033[1;30m<><><><><><><><><><><><><><><><><><>\033[0m" << endl;
                 break;
-            case 8: // Deletes the current RB Tree.
+            case 8: // Deletes the current AVL Tree. 
                 this->deleteTree();
                 break;
             case 9: // Quits
