@@ -2,6 +2,8 @@
 
 // Configures/toggles basic debugging data.
 const bool DEBUG_ENABLED = false;
+const bool INSERT_STEPPING = false;
+const bool DELETE_STEPPING = false;
 
 // Constructor/Destructor Set.
 /*
@@ -43,7 +45,7 @@ void C_Tree::insertValue(int val){
         throw MyException("Value already in the tree.");
     else{
         this->p_insertValue(this->p_root, val);
-        //this->debug(DEBUG_ENABLED);
+        if(INSERT_STEPPING){ this->debug(DEBUG_ENABLED); }
     }
 }
 
@@ -60,16 +62,14 @@ void C_Tree::p_insertValue(S_NODE* node, int value){
             node->left = this->p_createNode(node, value);
             this->p_updateHeights(node, node->left);
         }
-        else    
-            this->p_insertValue(node->left, value);
+        else{ this->p_insertValue(node->left, value); }
     }
     else if(value > node->value){
         if(node->right == NULL){
             node->right = this->p_createNode(node, value);
             this->p_updateHeights(node, node->right);
         }
-        else    
-            this->p_insertValue(node->right, value);
+        else{ this->p_insertValue(node->right, value); }
     }
     else{ throw MyException("This value is already in the tree."); }
 }
@@ -120,8 +120,7 @@ void C_Tree::p_createTree(int value){
 void C_Tree::p_updateHeights(S_NODE* node, S_NODE* from, bool inserting){
     int difference, caseCode;
 
-    if(!inserting && DEBUG_ENABLED){ cout << "updating\n"; }
-
+    // Increments/Decrements left side height.
     if(node->left == from){
         (inserting) ? node->lheight++ : node->lheight--;
         difference = abs(node->rheight - node->lheight);
@@ -129,20 +128,21 @@ void C_Tree::p_updateHeights(S_NODE* node, S_NODE* from, bool inserting){
         // Check for problem and address it.
         if(difference > 1){ caseCode = this->p_balance(node); }
 
-        // Continue up.
+        // Continue up the tree.
         if(node != this->p_root){
             if(inserting && node->lheight > node->rheight)
                 this->p_updateHeights(node->parent, node);     
             else if(!inserting && node->lheight >= node->rheight){
                 if(caseCode == 2 || caseCode == 4){
+                    // Jumps to prevent a double decrement.
                     if(node->parent != this->p_root)
                         this->p_updateHeights(node->parent->parent, node->parent, inserting);
                 }
-                else
-                    this->p_updateHeights(node->parent, node, inserting);
+                else{ this->p_updateHeights(node->parent, node, inserting); }
             }
         }
     }
+    // Increments/Decrements right side height.
     else if(node->right == from){
         (inserting) ? node->rheight++ : node->rheight--;
         difference = abs(node->rheight - node->lheight);
@@ -150,17 +150,17 @@ void C_Tree::p_updateHeights(S_NODE* node, S_NODE* from, bool inserting){
         // Check for problem and address it.
         if(difference > 1){ caseCode = this->p_balance(node); }
         
-        // Continue up.
+        // Continue up the tree.
         if(node != this->p_root){
             if(inserting && node->rheight > node->lheight)
                 this->p_updateHeights(node->parent, node);
             else if(!inserting && node->rheight >= node->lheight){
                 if(caseCode == 1 || caseCode == 3){
+                    // Jumps to prevent a double decrement.
                     if(node->parent != this->p_root)
                         this->p_updateHeights(node->parent->parent, node->parent, inserting);
                 }
-                else
-                    this->p_updateHeights(node->parent, node, inserting);
+                else{ this->p_updateHeights(node->parent, node, inserting); }
             }
         }
     }
@@ -190,7 +190,6 @@ int C_Tree::p_balance(S_NODE* node){
 
     if(node->lheight > node->rheight){
         parent = node->left;
-        
         // Case 1.
         if(parent->rheight > parent->lheight){
             this->p_case1(node);
@@ -204,7 +203,6 @@ int C_Tree::p_balance(S_NODE* node){
     }
     else if(node->rheight > node->lheight){
         parent = node->right;
-        
         // Case 2.
         if(parent->lheight > parent->rheight){
             this->p_case2(node);
@@ -216,7 +214,6 @@ int C_Tree::p_balance(S_NODE* node){
             return 4;
         }
     }
-    else{ return -1; }
     return 0;
 }
 
@@ -289,10 +286,11 @@ void C_Tree::print(bool formatted){
     if(this->p_root == NULL)
         throw MyException("Tree does not exist. Cannot Print.");
     else{
+        // Utilizes formatted print when not specified otherwise.
         if(formatted)
-            this->p_formattedPrint(this->p_root);
+            this->p_formattedPrint(this->p_root); 
         else
-            this->p_printInOrder(this->p_root);
+            this->p_printInOrder(this->p_root); 
     }
 }
 
@@ -329,10 +327,12 @@ void C_Tree::p_formattedPrint(S_NODE *node, int indent){
         char buffer[50];
         sprintf(buffer, " \033[1;33m[%d:%d]\033[0m", node->lheight, node->rheight);
 
-        // Highlights height imbalances.
+        // Highlights height imbalances when debugging is enabled.
         char buffer_2[50] = "";
         if(DEBUG_ENABLED){
             int difference = abs(node->lheight - node->rheight);
+
+            // Colors differences greater than 1 red.
             if(difference < 2){ sprintf(buffer_2, " %d", difference); }
             else{ sprintf(buffer_2, " \033[1;31m%d\033[0m", difference); }
         }
@@ -358,7 +358,7 @@ void C_Tree::deleteNode(int value){
         throw MyException("Cannot remove value that does not exist.");
     else{
         this->p_deleteNode(this->findNode(value), value);
-        this->debug(DEBUG_ENABLED);
+        if(DELETE_STEPPING){ this->debug(DEBUG_ENABLED); }
     }
 }
 
@@ -390,12 +390,11 @@ void C_Tree::p_deleteNode(S_NODE* node, int value){
                 }
                 else{ throw MyException("Floating pointer?"); }
             }
-
             delete node;
         }
         // Predecessor Case.
         else if(node->right == NULL){ 
-            if(DEBUG_ENABLED){ cout << "Finding predecessor\n"; }
+            if(DEBUG_ENABLED && DELETE_STEPPING){ cout << "Finding predecessor\n"; }
 
             // Replaces the node value with in-order predecessor.
             S_NODE* predecessor = this->p_findPredecessor(node->left);
@@ -404,7 +403,7 @@ void C_Tree::p_deleteNode(S_NODE* node, int value){
         }
         // Successor Case.
         else{
-            if(DEBUG_ENABLED){ cout << "Finding successor\n"; }
+            if(DEBUG_ENABLED && DELETE_STEPPING){ cout << "Finding successor\n"; }
 
             // Replaces the node value with in-order successor.
             S_NODE* successor = this->p_findSuccessor(node->right);
@@ -442,12 +441,12 @@ void C_Tree::p_deleteTree(S_NODE* node){
         this->p_deleteTree(node->left);
     if(node->right != NULL)
         this->p_deleteTree(node->right);
-    if(node->parent != NULL){
-        if(node->parent->value > node->value)
-            node->parent->left = NULL;
-        else if(node->parent->value < node->value)
-            node->parent->right = NULL;
-    }
+    //if(node->parent != NULL){
+    //    if(node->parent->value > node->value)
+    //        node->parent->left = NULL;
+    //    else if(node->parent->value < node->value)
+    //        node->parent->right = NULL;
+    //}
     delete(node);
     if(node == this->p_root){ this->p_root = NULL; }
 }
@@ -523,10 +522,8 @@ S_NODE* C_Tree::p_findSuccessor(S_NODE* node){
 **    Side Effects: N/A
 */
 int C_Tree::getTreeHeight(){
-    if(this->p_root == NULL)
-        return 0;
-    else
-        return this->getHeight(this->p_root);
+    if(this->p_root == NULL){ return 0; }
+    else{ return this->getHeight(this->p_root); }
 }
 
 /*
@@ -572,9 +569,9 @@ int C_Tree::p_getHeight(S_NODE* node){
 void C_Tree::readFile(char* fileName){
     struct stat fileInfo;
     string errorString;
-    int error;
 
-    error = stat(fileName, &fileInfo);
+    // Performs basic input validation.
+    int error = stat(fileName, &fileInfo);
     if(error != 0){
         errorString = strerror(errno);
         errorString += ": ";
@@ -586,8 +583,7 @@ void C_Tree::readFile(char* fileName){
         errorString += fileName;
         throw runtime_error(errorString);
     }
-    else
-        this->p_readFile(fileName);
+    else{ this->p_readFile(fileName); }
 }
 
 /*
@@ -642,11 +638,11 @@ void C_Tree::p_readFile(char* fileName){
 **    Side Effects: Calls delete tree which utilizes side effects.
 */
 bool C_Tree::p_stop(){
-    // Ending debugging data.
+    // Ending debugging data. Allows for exit printing.
     debug(DEBUG_ENABLED);
 
-    if(this->p_root != NULL) // Not worth killing the execution.
-        this->deleteTree(); 
+    // Not worth killing the execution.
+    if(this->p_root != NULL){ this->deleteTree(); } 
 
     cout << "Quitting..." << endl;
     return true;
@@ -663,10 +659,8 @@ bool C_Tree::p_stop(){
 void C_Tree::debug(bool set){
     if(!set){ return; }
     
-    if(this->p_root == NULL)
-        cout << "No tree" << endl;
-    else
-        this->print();
+    if(this->p_root != NULL){ this->print(); }
+    else{ cout << "No tree to print." << endl; }
 
     cout << endl <<"Hit [ENTER] to continue..." << endl;
     cin.ignore();
