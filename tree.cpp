@@ -109,7 +109,7 @@ void C_Tree::p_createTree(int value){
 }
 
 
-// Update Height Method Set.
+// Update Height Method.
 /*
 **    Author: Dan Bauer
 **    Function Purpose:
@@ -441,12 +441,6 @@ void C_Tree::p_deleteTree(S_NODE* node){
         this->p_deleteTree(node->left);
     if(node->right != NULL)
         this->p_deleteTree(node->right);
-    //if(node->parent != NULL){
-    //    if(node->parent->value > node->value)
-    //        node->parent->left = NULL;
-    //    else if(node->parent->value < node->value)
-    //        node->parent->right = NULL;
-    //}
     delete(node);
     if(node == this->p_root){ this->p_root = NULL; }
 }
