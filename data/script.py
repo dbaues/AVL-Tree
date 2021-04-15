@@ -9,14 +9,15 @@ from random import sample
 """
 
 # File Values.
-N_SIZE = 50
+N_SIZE = 1000
 MIN = 1
-MAX = 100
-FILE_NAME = "tmp10.dat"
+MAX = 9999
+FILE_NAME = "del2.dat"
+N_TO_DELETE = 800
 
 # Creates random samples.
 list = sample(range(MIN,MAX),N_SIZE)
-list2 = sample(list, int(N_SIZE/2))
+list2 = sample(list, N_TO_DELETE)
 
 # Generates the data file.
 file = open(FILE_NAME, 'w')
