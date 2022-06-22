@@ -1,4 +1,3 @@
-from random import randint
 from random import sample
 
 """
@@ -16,7 +15,7 @@ FILE_NAME = "del2.dat"
 N_TO_DELETE = 800
 
 # Creates random samples.
-list = sample(range(MIN,MAX),N_SIZE)
+list = sample(range(MIN, MAX), N_SIZE)
 list2 = sample(list, N_TO_DELETE)
 
 # Generates the data file.

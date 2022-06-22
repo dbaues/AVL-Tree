@@ -1,10 +1,12 @@
-INCLUDE_DIR	:= include
+SRC_DIR		:= src
+INC_DIR		:= ${SRC_DIR}/include
+OBJ_DIR		:= ${SRC_DIR}/obj
+
 CC			:= g++
 CFLAGS		:= -I${INCLUDE_DIR}
 
-OBJS	 	:= main.o tree.o customErrorClass.o
-DEPS_CEC	:= ${INCLUDE_DIR}/customErrorClass.h	# Path to customErrorClass.h
-DEPS_TREE	:= ${INCLUDE_DIR}/tree.h				# Path to tree.h
+_OBJS	 	:= main.o tree.o customErrorClass.o		# List of created object files
+OBJS		:= ${patsubst %, ${OBJ_DIR}/%, ${_OBJS}}# Generics for file names
 
 .PHONY: clean all
 
@@ -15,14 +17,8 @@ clean:
 	rm ${OBJS} Bauer_CodeChallenge2
 
 # Creates the object files.
-customErrorClass.o: customErrorClass.cpp ${DEPS_CEC}
-	${CC} -c -o $@ ${CFLAGS} $<
-
-tree.o: tree.cpp ${DEPS_TREE}
-	${CC} -c -o $@ ${CFLAGS} $<
-
-main.o: main.cpp ${DEPS_TREE}
-	${CC} -c -o $@ ${CFLAGS} $<
+${OBJ_DIR}/%.o: ${SRC_DIR}/%.cpp
+	${CC} -c -o $@ $< ${CFLAGS}
 
 # Creates the executable.
 Bauer_CodeChallenge2: ${OBJS}

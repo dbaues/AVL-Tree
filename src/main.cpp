@@ -12,7 +12,7 @@ void inputValidation(int argc, char **argv){
 
     if(argc != 2){
         errorString = "USAGE: ";
-        errorString += argv[0]; 
+        errorString += argv[0];
         errorString += " [FILENAME] \nexiting...";
         throw MyException(errorString);
     }
@@ -29,8 +29,8 @@ int main(int argc, char **argv){
     C_Tree tree;
 
     try{
-        inputValidation(argc, argv);  
-        tree.readFile(argv[1]);  
+        inputValidation(argc, argv);
+        tree.readFile(argv[1]);
     }
     catch(runtime_error &e){
         string error = "RUNTIME ERROR: ";
@@ -42,6 +42,5 @@ int main(int argc, char **argv){
         cout << e.what() << endl;
         return 2;
     }
-    
     return 0;
 }
