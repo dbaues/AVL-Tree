@@ -131,7 +131,7 @@ void C_Tree::p_updateHeights(S_NODE* node, S_NODE* from, bool inserting){
         // Continue up the tree.
         if(node != this->p_root){
             if(inserting && node->lheight > node->rheight)
-                this->p_updateHeights(node->parent, node);     
+                this->p_updateHeights(node->parent, node);
             else if(!inserting && node->lheight >= node->rheight){
                 if(caseCode == 2 || caseCode == 4){
                     // Jumps to prevent a double decrement.
@@ -149,7 +149,7 @@ void C_Tree::p_updateHeights(S_NODE* node, S_NODE* from, bool inserting){
 
         // Check for problem and address it.
         if(difference > 1){ caseCode = this->p_balance(node); }
-        
+
         // Continue up the tree.
         if(node != this->p_root){
             if(inserting && node->rheight > node->lheight)
@@ -177,12 +177,12 @@ void C_Tree::p_updateHeights(S_NODE* node, S_NODE* from, bool inserting){
 **    Side Effects: Modifies the internal data structure.
 **
 **    =================================================
-**    Case 1:   |   Case 2:   |   Case 3:   |   Case 4:  
-**       A      |      A      |       A     |    A           
-**      /       |       \     |      /      |     \        
-**     B        |        B    |     B       |      B      
-**      \       |       /     |    /        |       \      
-**       C      |      C      |   C         |        C     
+**    Case 1:   |   Case 2:   |   Case 3:   |   Case 4:
+**       A      |      A      |       A     |    A
+**      /       |       \     |      /      |     \
+**     B        |        B    |     B       |      B
+**      \       |       /     |    /        |       \
+**       C      |      C      |   C         |        C
 **    =================================================
 */
 int C_Tree::p_balance(S_NODE* node){
@@ -196,7 +196,7 @@ int C_Tree::p_balance(S_NODE* node){
             return 1;
         }
         // Case 3.
-        else if(parent->lheight >= parent->rheight){       
+        else if(parent->lheight >= parent->rheight){
             this->p_case3(node);
             return 3;
         }
@@ -288,9 +288,9 @@ void C_Tree::print(bool formatted){
     else{
         // Utilizes formatted print when not specified otherwise.
         if(formatted)
-            this->p_formattedPrint(this->p_root); 
+            this->p_formattedPrint(this->p_root);
         else
-            this->p_printInOrder(this->p_root); 
+            this->p_printInOrder(this->p_root);
     }
 }
 
@@ -366,7 +366,7 @@ void C_Tree::deleteNode(int value){
 **    Author: Dan Bauer
 **    Function Purpose:
 **        Removes the specified value from the tree.
-**    Function Output: N/A (No return) 
+**    Function Output: N/A (No return)
 **    Side Effects: Modifies the internal private data structure.
 */
 void C_Tree::p_deleteNode(S_NODE* node, int value){
@@ -376,7 +376,7 @@ void C_Tree::p_deleteNode(S_NODE* node, int value){
         // Deletion Case.
         if(node->left == NULL && node->right == NULL){
             if(DEBUG_ENABLED){ cout << "Deletion time\n"; }
-            
+
             // Sets parent's respective pointer to NULL.
             S_NODE* parent = node->parent;
             if(parent != NULL){
@@ -393,7 +393,7 @@ void C_Tree::p_deleteNode(S_NODE* node, int value){
             delete node;
         }
         // Predecessor Case.
-        else if(node->right == NULL){ 
+        else if(node->right == NULL){
             if(DEBUG_ENABLED && DELETE_STEPPING){ cout << "Finding predecessor\n"; }
 
             // Replaces the node value with in-order predecessor.
@@ -472,11 +472,11 @@ S_NODE* C_Tree::p_findNode(S_NODE* node, int target){
     S_NODE* retval = NULL;
     if(target == node->value){ retval = node; }
     else if(target > node->value){
-        if(node->right != NULL) 
-            retval = this->p_findNode(node->right, target); 
+        if(node->right != NULL)
+            retval = this->p_findNode(node->right, target);
     }
     else if(target < node->value){
-        if(node->left != NULL) 
+        if(node->left != NULL)
             retval = this->p_findNode(node->left, target);
     }
     return retval;
@@ -543,7 +543,7 @@ int C_Tree::getHeight(S_NODE* node){
 */
 int C_Tree::p_getHeight(S_NODE* node){
     if(node == NULL){ return 0; }
-    
+
     int lHeight=1, rHeight=1;
     lHeight += this->p_getHeight(node->left);
     rHeight += this->p_getHeight(node->right);
@@ -603,12 +603,12 @@ void C_Tree::p_readFile(char* fileName){
                 if(file >> num){ this->deleteNode(num); }
                 else{ throw MyException("Unexpected End-of-file."); }
                 break;
-            case 2: // Prints the current AVL Tree. 
+            case 2: // Prints the current AVL Tree.
                 cout << "\033[1;30m<><><><><><><PRINT TREE><><><><><><>\033[0m" << endl;
                 this->print();
                 cout << "\033[1;30m<><><><><><><><><><><><><><><><><><>\033[0m" << endl;
                 break;
-            case 8: // Deletes the current AVL Tree. 
+            case 8: // Deletes the current AVL Tree.
                 this->deleteTree();
                 break;
             case 9: // Quits
@@ -616,7 +616,7 @@ void C_Tree::p_readFile(char* fileName){
                 break;
             default:
                 throw MyException("Invalid Command.");
-        }       
+        }
     }
     if(!ended)
         throw MyException("Preliminary Exit. Exitted without exit command.");
@@ -636,7 +636,7 @@ bool C_Tree::p_stop(){
     debug(DEBUG_ENABLED);
 
     // Not worth killing the execution.
-    if(this->p_root != NULL){ this->deleteTree(); } 
+    if(this->p_root != NULL){ this->deleteTree(); }
 
     cout << "Quitting..." << endl;
     return true;
@@ -648,11 +648,11 @@ bool C_Tree::p_stop(){
 **        Outputs some basic debugging data and allows for stepping.
 **        Allows the User to step threw the insertions.
 **    Function Output: N/A (No return)
-**    Side Effects: Utilizes IO funtions.
+**    Side Effects: Utilizes IO functions.
 */
 void C_Tree::debug(bool set){
     if(!set){ return; }
-    
+
     if(this->p_root != NULL){ this->print(); }
     else{ cout << "No tree to print." << endl; }
 
@@ -681,7 +681,7 @@ void C_Tree::p_rotateLeft(S_NODE* node){
 /*
 **    Author: Dan Bauer
 **    Function Purpose:
-**        Adjusts the internal data structure to comply with a Left rotaion on
+**        Adjusts the internal data structure to comply with a Left rotation on
 **        a specified node. Overloaded for parameter simplicity.
 **    Function Output: N/A (No return)
 **    Side Effects: Modifies the internal data structure.
@@ -724,7 +724,7 @@ void C_Tree::p_rotateRight(S_NODE* node){
 /*
 **    Author: Dan Bauer
 **    Function Purpose:
-**        Adjusts the internal data structure to comply with a Right rotaion on
+**        Adjusts the internal data structure to comply with a Right rotation on
 **        a specified node. Overloaded for parameter simplicity.
 **    Function Output: N/A (No return)
 **    Side Effects: Modifies the internal data structure.
