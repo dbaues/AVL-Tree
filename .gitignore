@@ -1,5 +1,6 @@
 /.vscode
 *.dat
+!data/sample.dat
 *.o
 *.txt
 Bauer_CodeChallenge2
