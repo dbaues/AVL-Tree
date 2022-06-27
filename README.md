@@ -10,13 +10,18 @@ updated the git structure. Feel free to use any of this code in learning AVL Tre
 ### Compilation
 
 The included Makefile contains 2 basic targets (aside from constructing .o files).
-> `make all` < will compile the AVL Tree program
-> `make clean` < will remove all .o files and the executable
+
+To compile the project run...
+
+    make all
+To remove all .o files and the executable run...
+
+    make clean
 
 To run the AVL Tree program you will need to have a data file that follows the pattern defined in
 the next section. The program takes one command line argument of the desired command data file.
 
-> `./Bauer_CodeChallenge2 data/sample.dat`
+    ./Bauer_CodeChallenge2 data/sample.dat
 
 ### [Command and Data Files](data/README.md)
 
