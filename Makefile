@@ -5,8 +5,8 @@ OBJ_DIR		:= ${SRC_DIR}/obj
 CC			:= g++
 CFLAGS		:= -I${INCLUDE_DIR}
 
-_OBJS	 	:= main.o tree.o customErrorClass.o		# List of created object files
-OBJS		:= ${patsubst %, ${OBJ_DIR}/%, ${_OBJS}}# Generics for file names
+_OBJS	 	:= main.o tree.o customErrorClass.o		 # List of created object files
+OBJS		:= ${patsubst %, ${OBJ_DIR}/%, ${_OBJS}} # Generics for file names
 
 .PHONY: clean all
 
